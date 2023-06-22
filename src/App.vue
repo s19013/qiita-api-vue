@@ -1,6 +1,7 @@
 <script setup>
 import axios from 'axios';
 import { ref,reactive,onMounted,nextTick } from 'vue';
+import ArticleComponent from './components/ArticleComponent.vue';
 
 const articles = ref([]);
 
@@ -11,7 +12,7 @@ const getArticle = async() => {
     params:{
       page:1,
       per_page:10,
-      query:"vue",
+      query:null,
     }
   })
   /** @param {res} api通信で取ってきたデータたち */
@@ -32,11 +33,15 @@ const getArticle = async() => {
 <template>
   <main>
     <template v-for="(article,index) in articles" :key="index">
-      <p>{{ article.title }}</p>
+      <ArticleComponent
+        :article="article"
+      />
     </template>
   </main>
 </template>
 
 <style scoped lang="scss">
-
+.main{
+  width: 100%;
+}
 </style>
