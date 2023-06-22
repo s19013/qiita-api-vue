@@ -1,5 +1,4 @@
 <script setup>
-import { ref,reactive } from 'vue';
 import { defineProps } from 'vue';
 
 // 親から受け取るデータ
