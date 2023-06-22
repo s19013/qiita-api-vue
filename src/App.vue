@@ -1,47 +1,42 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import axios from 'axios';
+import { ref,reactive,onMounted,nextTick } from 'vue';
+
+const articles = ref([]);
+
+
+/** qiitaの記事取ってくる */
+const getArticle = async() => {
+  await axios.get('https://qiita.com/api/v2/items',{
+    params:{
+      page:1,
+      per_page:10,
+      query:"vue",
+    }
+  })
+  /** @param {res} api通信で取ってきたデータたち */
+  .then((res)=>{
+      // 配列を入れ替え
+      articles.value = res.data
+  })
+  .catch((errors) => {
+    console.log(errors);
+  })
+}
+
+// onMounted(() => { 
+//   getArticle()
+// });
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
   <main>
-    <TheWelcome />
+    <template v-for="(article,index) in articles" :key="index">
+      <p>{{ article.title }}</p>
+    </template>
   </main>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-}
+<style scoped lang="scss">
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
 </style>
