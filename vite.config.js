@@ -12,5 +12,9 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
+  },
+  base:'/qiita-api-vue',
+  build:{
+    outDir:"docs"
   }
 })
