@@ -10,6 +10,8 @@ const props = defineProps({
 const keyword = ref(props.original)
 // 親が子の情報を受け取る
 const passKeyword = () => {
+    // QiitaApiではqueryが空文字だとなにも取ってこないので回避
+    if (keyword.value == '') {keyword.value = null}
     return keyword.value
 }
 
