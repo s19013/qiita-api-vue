@@ -3,9 +3,11 @@ import axios from 'axios';
 import { ref,reactive,onMounted,nextTick } from 'vue';
 import ArticleComponent from './components/ArticleComponent.vue';
 import InputComponent from './components/InputComponent.vue';
+import SelectorComponent from './components/SelectorComponent.vue';
 
 // コンポーネントたち
 const Input =ref(null)
+const PerPageSelector = ref(null)
 
 
 
@@ -18,7 +20,7 @@ const InputHistory = reactive({
 
 /** qiitaの記事取ってくる */
 const getArticle = async({page,per_page,keyword}) => {
-  console.log(keyword);
+  console.log(per_page,keyword);
   await axios.get('https://qiita.com/api/v2/items',{
     params:{
       page:page,
@@ -39,7 +41,7 @@ const getArticle = async({page,per_page,keyword}) => {
 const search = () =>{
   getArticle({
     page:1,
-    per_page:10,
+    per_page:PerPageSelector.value.passSelected(),
     keyword:Input.value.passKeyword()
   })
 }
@@ -55,6 +57,8 @@ onMounted(() => {
       <InputComponent ref="Input" :original="InputHistory.keyword"/>
       <button @click="search">検索</button>
     </div>
+
+    <SelectorComponent ref="PerPageSelector" :original="InputHistory.per_page" :options=[5,10,15,20,25,30] />
     <template v-for="(article,index) in articles" :key="index">
       <ArticleComponent
         :article="article"
