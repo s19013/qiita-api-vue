@@ -63,7 +63,11 @@ const turnPage =(num) => {
 }
 
 onMounted(() => { 
-  // getArticle()
+  getArticle({
+    page:1,
+    per_page:InputHistory.per_page,
+    keyword:InputHistory.keyword
+  })
 });
 </script>
 
