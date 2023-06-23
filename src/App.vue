@@ -4,6 +4,7 @@ import { ref,reactive,onMounted,nextTick } from 'vue';
 import ArticleComponent from './components/ArticleComponent.vue';
 import InputComponent from './components/InputComponent.vue';
 import SelectorComponent from './components/SelectorComponent.vue';
+import PaginationComponent from './components/PaginationComponent.vue';
 
 // コンポーネントたち
 const Input =ref(null)
@@ -32,6 +33,13 @@ const getArticle = async({page,per_page,keyword}) => {
   .then((res)=>{
       // 配列を入れ替え
       articles.value = res.data
+
+      // 履歴更新
+      Object.assign(InputHistory,{ 
+        page:page,
+        per_page:per_page,
+        keyword:keyword
+      });
   })
   .catch((errors) => {
     console.log(errors);
@@ -46,6 +54,14 @@ const search = () =>{
   })
 }
 
+const turnPage =(num) => {
+  getArticle({
+    page:num,
+    per_page:InputHistory.per_page,
+    keyword:InputHistory.keyword
+  })
+}
+
 onMounted(() => { 
   // getArticle()
 });
@@ -53,17 +69,28 @@ onMounted(() => {
 
 <template>
   <main>
+    <p>1時間につき60回まで</p>
     <div class="search">
       <InputComponent ref="Input" :original="InputHistory.keyword"/>
       <button @click="search">検索</button>
     </div>
 
-    <SelectorComponent ref="PerPageSelector" :original="InputHistory.per_page" :options=[5,10,15,20,25,30] />
+    <SelectorComponent 
+      ref="PerPageSelector" 
+      :original="InputHistory.per_page" 
+      :options=[5,10,15,20,25,30] 
+    />
     <template v-for="(article,index) in articles" :key="index">
       <ArticleComponent
         :article="article"
       />
     </template>
+    <!-- qiitaapiでは100ページ目までしか見れないらしいので -->
+    <PaginationComponent 
+      :original="InputHistory.page" 
+      :pageCount="100"
+      @turnPage="turnPage"
+    />
   </main>
 </template>
 
