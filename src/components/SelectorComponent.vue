@@ -3,6 +3,10 @@ import {ref,defineProps,watch } from 'vue';
 
 const selected = ref(props.original)
 
+/** 
+ * @param {original} 初期値
+ * @param {options} optionタグの情報
+*/
 const props = defineProps({
     original:{
         type:[ String, Number],
@@ -14,12 +18,12 @@ const props = defineProps({
     }
 })
 
-// 親が子の情報を受け取る
+/**  親が子の情報を受け取る */
 const passSelected = () => {
     return selected.value
 }
 
-// propsの値が変化したらselectedを更新する
+/**  propsの値が変化したらselectedを更新する */
 watch(() => props.original,(newValue,oldValue) => {
   selected.value = newValue
 })
