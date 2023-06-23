@@ -14,7 +14,9 @@ const passKeyword = () => {
 }
 
 // propsの値が変化したらkeywordを更新する
-watch(origin,(newValue,oldValue) => {
+// そのままprops.originalだと動かないらしい
+// おそらくアロー関数使って帰り値で判断してるのかも?
+watch( () => props.original,(newValue,oldValue) => {
   keyword.value = newValue
 })
 
