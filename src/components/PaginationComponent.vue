@@ -25,7 +25,7 @@ const emit = defineEmits(['turnPage'])
  *  @param min 表示上の最小値
  *  @param max 表示上の最大値
 */
-const rebuildingDisplayNumbers = (min,max) => {
+const rebuildingDisplayPages = (min,max) => {
     const temp = []
     for (let index = min; index <= max; index++) {
         temp.push(index)
@@ -35,27 +35,31 @@ const rebuildingDisplayNumbers = (min,max) => {
 }
 
 // ページをめくる(親コンポーネントに連絡)
-const turnPage = (num) => {
-    emit('turnPage',num)
+const turnPage = (num) => { emit('turnPage',num) }
+
+// watchとmountedで使う処理
+const divide = () => {
+    // props...とか書くのめんどいので変数に入れとく
+    const pageCount = props.pageCount.value
+
+    // selectedが5以下の場合表示の仕方が特殊
+    if (selected.value <= 5 ) {rebuildingDisplayPages(1,9)}
+    // pageCountに近い時も特殊
+    else if (selected.value > pageCount) {
+        rebuildingDisplayPages(pageCount - 8,pageCount)
+    }
+    else {rebuildingDisplayPages(selected.value - 4,selected.value + 4)}
 }
 
 // propsの値が変化したらselectedを更新する
 watch(() => props.original,(newValue,oldValue) => {
-    // newValueが5以下の場合表示の仕方が特殊
     selected.value = newValue
-    if (newValue <= 5 ) {rebuildingDisplayNumbers(1,9)}
-    else{
-        rebuildingDisplayNumbers(selected.value - 4,selected.value + 4)
-    }
+    divide()
 })
 
 onMounted(() => { 
   nextTick(() => {
-    // selectedが5以下の場合表示の仕方が特殊
-    if (selected.value <= 5 ) {rebuildingDisplayNumbers(1,9)}
-    // 95以上も特殊
-    else if (selected.value >= 95) {rebuildingDisplayNumbers(91,100)}
-    else {rebuildingDisplayNumbers(selected.value - 4,selected.value + 4)}
+    divide()
   })
 });
 
