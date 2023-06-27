@@ -2,7 +2,7 @@
 import {ref,defineProps,watch,onMounted,nextTick,defineEmits } from 'vue';
 
 const selected = ref(props.original)
-const displayNumber = ref([])
+const displayNumbers = ref([])
 
 /**
  * @param original 初期値
@@ -25,13 +25,13 @@ const emit = defineEmits(['turnPage'])
  *  @param min 表示上の最小値
  *  @param max 表示上の最大値
 */
-const rebuildingDisplayNumber = (min,max) => {
+const rebuildingDisplayNumbers = (min,max) => {
     const temp = []
     for (let index = min; index <= max; index++) {
         temp.push(index)
     }
 
-    displayNumber.value = temp
+    displayNumbers.value = temp
 }
 
 // ページをめくる(親コンポーネントに連絡)
@@ -43,17 +43,17 @@ const turnPage = (num) => {
 watch(() => props.original,(newValue,oldValue) => {
     // newValueが5以下の場合表示の仕方が特殊
     selected.value = newValue
-    if (newValue <= 5 ) {rebuildingDisplayNumber(1,9)}
+    if (newValue <= 5 ) {rebuildingDisplayNumbers(1,9)}
     else{
-        rebuildingDisplayNumber(selected.value - 4,selected.value + 4)
+        rebuildingDisplayNumbers(selected.value - 4,selected.value + 4)
     }
 })
 
 onMounted(() => { 
-  // selectedが5以下の場合表示の仕方が特殊
   nextTick(() => {
-    if (selected.value <= 5 ) {rebuildingDisplayNumber(1,9)}
-    else {rebuildingDisplayNumber(selected.value - 4,selected.value + 4)}
+    // selectedが5以下の場合表示の仕方が特殊
+    if (selected.value <= 5 ) {rebuildingDisplayNumbers(1,9)}
+    else {rebuildingDisplayNumbers(selected.value - 4,selected.value + 4)}
   })
 });
 
@@ -65,7 +65,7 @@ defineExpose({
 <template>
     <div class="pagination">
         <ul>
-            <li v-for="num in displayNumber" :key="num">
+            <li v-for="num in displayNumbers" :key="num">
                 <button 
                     :class="num == selected ? 'selected': ''" 
                     :disabled="num == selected"
@@ -82,11 +82,7 @@ defineExpose({
 ul{display: flex;}
 li{
     list-style: none;
-    button{
-        padding: 0.5rem  1rem;
-    }
+    button{ padding: 0.5rem  1rem; }
 }
-.selected{
-    background-color: aquamarine;
-}
+.selected{ background-color: aquamarine; }
 </style>
