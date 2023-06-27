@@ -8,7 +8,7 @@ const props = defineProps(['article'])
 
 <template>
     <div class="article">
-        <a :href="props.article.url">
+        <a :href="props.article.url" target="_blank" rel="noopener noreferrer">
             <h2>{{ props.article.title }}</h2>
         </a>
     </div>
