@@ -54,7 +54,7 @@ const search = () =>{
   })
 }
 
-const turnPage =(num) => {
+const turnPage = (num) => {
   getArticle({
     page:num,
     per_page:InputHistory.per_page,

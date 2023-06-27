@@ -21,5 +21,4 @@ const props = defineProps(['article'])
     padding:0.5rem;
 
 }
-h4{margin: 0.5rem 0 ;}
 </style>
