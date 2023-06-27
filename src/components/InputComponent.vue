@@ -22,7 +22,7 @@ watch( () => props.original,(newValue,oldValue) => {
   keyword.value = newValue
 })
 
-
+// これに入れることで､親が子の関数を動かすことができる
 defineExpose({
     passKeyword
 });
