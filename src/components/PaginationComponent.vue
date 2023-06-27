@@ -2,7 +2,7 @@
 import {ref,defineProps,watch,onMounted,nextTick,defineEmits } from 'vue';
 
 const selected = ref(props.original)
-const displayNumbers = ref([])
+const displayPages = ref([])
 
 /**
  * @param original 初期値
@@ -21,7 +21,7 @@ const props = defineProps({
 
 const emit = defineEmits(['turnPage'])
 
-/** @func displayNumberを作り直す
+/** @func displayPagesを作り直す
  *  @param min 表示上の最小値
  *  @param max 表示上の最大値
 */
@@ -31,7 +31,7 @@ const rebuildingDisplayNumbers = (min,max) => {
         temp.push(index)
     }
 
-    displayNumbers.value = temp
+    displayPages.value = temp
 }
 
 // ページをめくる(親コンポーネントに連絡)
@@ -53,6 +53,8 @@ onMounted(() => {
   nextTick(() => {
     // selectedが5以下の場合表示の仕方が特殊
     if (selected.value <= 5 ) {rebuildingDisplayNumbers(1,9)}
+    // 95以上も特殊
+    else if (selected.value >= 95) {rebuildingDisplayNumbers(91,100)}
     else {rebuildingDisplayNumbers(selected.value - 4,selected.value + 4)}
   })
 });
@@ -65,7 +67,7 @@ defineExpose({
 <template>
     <div class="pagination">
         <ul>
-            <li v-for="num in displayNumbers" :key="num">
+            <li v-for="num in displayPages" :key="num">
                 <button 
                     :class="num == selected ? 'selected': ''" 
                     :disabled="num == selected"
