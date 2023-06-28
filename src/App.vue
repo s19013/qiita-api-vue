@@ -10,9 +10,10 @@ import PaginationComponent from './components/PaginationComponent.vue';
 const Input =ref(null)
 const PerPageSelector = ref(null)
 
-
-
+// qiita記事
 const articles = ref([]);
+
+// 入力記録(ページめくりで使う)
 const InputHistory = reactive({
   page:1,
   per_page:10,
