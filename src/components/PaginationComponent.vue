@@ -1,5 +1,5 @@
 <script setup>
-import {ref,defineProps,watch,onMounted,nextTick,defineEmits } from 'vue';
+import {ref,defineProps,watch,onMounted,defineEmits } from 'vue';
 
 const selected = ref(props.original)
 const displayPages = ref([])
@@ -57,15 +57,7 @@ watch(() => props.original,(newValue,oldValue) => {
     divide()
 })
 
-onMounted(() => { 
-  nextTick(() => {
-    divide()
-  })
-});
-
-defineExpose({
-    
-});
+onMounted(() => { divide() });
 </script>
 
 <template>
