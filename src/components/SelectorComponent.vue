@@ -19,18 +19,14 @@ const props = defineProps({
 })
 
 /**  親が子の情報を受け取る */
-const passSelected = () => {
-    return selected.value
-}
+const passSelected = () => { return selected.value }
 
 /**  propsの値が変化したらselectedを更新する */
 watch(() => props.original,(newValue,oldValue) => {
   selected.value = newValue
 })
 
-defineExpose({
-    passSelected
-});
+defineExpose({ passSelected });
 </script>
 
 <template>
