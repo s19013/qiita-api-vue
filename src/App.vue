@@ -13,6 +13,9 @@ const PerPageSelector = ref(null)
 // qiita記事
 const articles = ref([]);
 
+// 読み込み中フラグ
+const isLoading = ref(false)
+
 // 入力記録(ページめくりで使う)
 const InputHistory = reactive({
   page:1,
@@ -22,7 +25,7 @@ const InputHistory = reactive({
 
 /** qiitaの記事取ってくる */
 const getArticle = async({page,per_page,keyword}) => {
-  console.log(per_page,keyword);
+  isLoading.value = true
   await axios.get('https://qiita.com/api/v2/items',{
     params:{
       page:page,
@@ -42,9 +45,8 @@ const getArticle = async({page,per_page,keyword}) => {
         keyword:keyword
       });
   })
-  .catch((errors) => {
-    console.log(errors);
-  })
+  .catch((errors) => { console.log(errors); })
+  isLoading.value = false
 }
 
 const search = () =>{
@@ -85,6 +87,8 @@ onMounted(() => {
       :original="InputHistory.per_page" 
       :options=[5,10,15,20,25,30] 
     />
+
+    <p v-if="isLoading">読み込み中</p>
     <template v-for="(article,index) in articles" :key="index">
       <ArticleComponent
         :article="article"
